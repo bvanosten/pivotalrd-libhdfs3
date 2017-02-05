@@ -48,8 +48,8 @@ UserInfo UserInfo::LocalUser() {
     uid = getuid();
 
     if ((bufsize = sysconf(_SC_GETPW_R_SIZE_MAX)) == -1) {
-        THROW(InvalidParameter,
-              "Invalid input: \"sysconf\" function failed to get the configure with key \"_SC_GETPW_R_SIZE_MAX\".");
+        // On certain linux systems _SC_GETPW_R_SIZE_MAX may not be set if not using glibc (e.g. musl)
+        bufsize = 1024;
     }
 
     std::vector<char> buffer(bufsize);
